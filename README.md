@@ -1,18 +1,55 @@
-# React + Vite
+# 🚀 React + Vite + React Router + Context API
 
-Pasos realizados
+Este proyecto es una base sencilla para manejar **autenticación y rutas protegidas** en una app React creada con **Vite**.
 
-1: Preparar el proyecto y instalar react-router-dom
-2: Creame nuestro context con el usuario,login,logout y localStorage const value = { user, loading, login, logout };
-3: Creamos nuestro componente de ruta protegidas <ProtectedRoute/>
-4: Haremos 3 páginas muy simples: Home (pública), Login (pública), Dashboard (protegida).
-5: Configuramos el router: públicas (/, /login) y protegidas (todo lo que cuelga de /app).
-6: Envolver la app con el AuthProvider, en mi caso en main.jsx
-7: Probamos el flujo: Ir a /app sin sesión ⇒ debe mandar a /login. Ponemos cualquier usuario y te lleva a app, y desde dasboard el botón cerrar sesión nos perderá el acceso a app y nos elimina nuestro "fake token"
+---
 
+## 🧩 Pasos realizados
 
-CASO REAL
+1. **Inicializar el proyecto**
+   - Crear el proyecto con Vite.
+   - Instalar React Router:
+     ```bash
+     npm install react-router-dom
+     ```
 
-Sustituye login(username, password) por una llamada a tu API que devuelva token/perfil.
-Guarda solo lo necesario; 
-Añade roles: { role: "admin" | "user" } y un RoleRoute que compruebe user.role.
+2. **Crear el contexto de autenticación (`AuthContext`)**
+   - Gestiona el estado del usuario, el inicio y cierre de sesión.
+   - Persiste la sesión con `localStorage`.
+   - Ejemplo del objeto que se expone:
+     ```js
+     const value = { user, loading, login, logout };
+     ```
+
+3. **Crear un componente de rutas protegidas**
+   - `<ProtectedRoute />` verifica si existe un usuario autenticado.
+   - Si no lo hay, redirige automáticamente a `/login`.
+
+4. **Definir las páginas básicas**
+   - **Home:** pública  
+   - **Login:** pública  
+   - **Dashboard:** protegida  
+
+5. **Configurar el enrutador**
+   - Rutas públicas: `/` y `/login`
+   - Rutas protegidas: todo lo que cuelga de `/app`
+
+6. **Envolver la aplicación con el proveedor de autenticación**
+   - En `main.jsx`, envolver `<App />` con `<AuthProvider>` para que el contexto esté disponible en toda la app.
+
+7. **Probar el flujo**
+   - Ir a `/app` sin sesión ⇒ redirige a `/login`
+   - Iniciar sesión con cualquier usuario ⇒ redirige a `/app`
+   - Desde el dashboard, hacer clic en “Cerrar sesión” ⇒ elimina el "token" y bloquea el acceso a `/app`
+
+---
+
+## 🧠 Caso real
+
+En un entorno real, deberías:
+
+1. **Reemplazar** la función `login(username, password)` por una **llamada a tu API** que devuelva un token y los datos del usuario.  
+2. **Guardar solo la información necesaria** en `localStorage` (por ejemplo, el token o el rol del usuario).  
+3. **Gestionar roles** de usuario, por ejemplo:
+   ```js
+   { role: "admin" | "user" }
