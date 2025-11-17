@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-
+import Cookies from "js-cookie"
 // 1) Creamos el contexto
 const AuthContext = createContext(null);
 
@@ -9,6 +9,10 @@ export function useAuth() {
   if (!ctx) throw new Error("useAuth debe usarse dentro de <AuthProvider>");
   return ctx;
 }
+
+// 3 Keys de almacenamientos 
+const COOKIE_KEY = "auth:user";
+
 
 /**
  * AuthProvider
@@ -22,6 +26,7 @@ export function AuthProvider({ children }) {
 
   // Cargar sesión guardada al montar
   useEffect(() => {
+
     const raw = localStorage.getItem("auth:user");
     if (raw) {
       try { setUser(JSON.parse(raw)); } catch {}
@@ -54,4 +59,48 @@ export function AuthProvider({ children }) {
 
   const value = { user, loading, login, logout };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+/// LO MISMO PERO USANDO JS-COOKIE
+export function AuthProviderCookie({children}){
+  const [user, setUser] = useState(null);         // null = no autenticado
+  const [loading, setLoading] = useState(true);   // para el "arranque"
+
+
+  // Cargar sesión guardada al montar
+  useEffect(() => {
+    const raw = Cookies.get(COOKIE_KEY);
+    if (raw) {
+      try { setUser(JSON.parse(raw)); } catch {}
+    }
+    setLoading(false);
+  }, []);
+
+  
+  // Guardar cuando cambie
+  useEffect(() => {
+    if (user) Cookies.set(COOKIE_KEY, JSON.stringify(user),{expires: 1}); // 1 -> 1 DÍA
+    else Cookies.remove(COOKIE_KEY);
+  }, [user]);
+
+    async function login(username, password) {
+    // En real: llamar a API, recibir token/perfil…
+    if (!username || !password) {
+      throw new Error("Credenciales inválidas");
+    }
+    // Usuario “fake”:
+    const fakeUser = { id: 1, name: username, role: "user" };
+    setUser(fakeUser);
+    return fakeUser;
+  }
+
+  function logout() {
+    // null==> usuario no logeado
+    setUser(null);
+  }
+
+  const value = { user, loading, login, logout, storage: "cookie" };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+
+
 }

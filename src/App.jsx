@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import { useEffect } from "react";
 
 
 /*
@@ -39,6 +40,14 @@ function PublicLayout() {
 }
 
 export default function App() {
+
+
+  //Si queremos decodificar las cookies
+/*   useEffect(() =>{
+    console.log(decodeURIComponent(document.cookie))
+  },[]) */
+
+  
   return (
     <BrowserRouter>
       <Routes>
