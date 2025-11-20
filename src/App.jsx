@@ -4,9 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import { useEffect } from "react";
-
-
+import { useAuth } from "./hook/auth/AuthContext";
 /*
 Pasos realizados
 
@@ -27,7 +25,11 @@ Añade roles: { role: "admin" | "user" } y un RoleRoute que compruebe user.role.
 
 */
 function PublicLayout() {
+
+  const { user, login } = useAuth();
+
   return (
+    
     <div>
       <nav style={{ display: "flex", gap: 12, padding: 12, borderBottom: "1px solid #eee" }}>
         <Link to="/">Home</Link>
@@ -41,6 +43,7 @@ function PublicLayout() {
 
 export default function App() {
 
+    console.log(decodeURIComponent(document.cookie))
 
   //Si queremos decodificar las cookies
 /*   useEffect(() =>{

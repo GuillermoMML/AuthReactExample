@@ -61,29 +61,30 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-/// LO MISMO PERO USANDO JS-COOKIE
-export function AuthProviderCookie({children}){
+
+export function AuthProvierCookie({children}){
+  
   const [user, setUser] = useState(null);         // null = no autenticado
   const [loading, setLoading] = useState(true);   // para el "arranque"
 
-
   // Cargar sesión guardada al montar
   useEffect(() => {
-    const raw = Cookies.get(COOKIE_KEY);
+
+    const raw = Cookies.get(COOKIE_KEY)
     if (raw) {
       try { setUser(JSON.parse(raw)); } catch {}
     }
     setLoading(false);
   }, []);
 
-  
   // Guardar cuando cambie
   useEffect(() => {
-    if (user) Cookies.set(COOKIE_KEY, JSON.stringify(user),{expires: 1}); // 1 -> 1 DÍA
+    if (user) Cookies.set(COOKIE_KEY, JSON.stringify(user),{expires: 1}); // 1-> 1día
     else Cookies.remove(COOKIE_KEY);
   }, [user]);
 
-    async function login(username, password) {
+  // Simulación de login (valida si hay algo escrito)
+  async function login(username, password) {
     // En real: llamar a API, recibir token/perfil…
     if (!username || !password) {
       throw new Error("Credenciales inválidas");
@@ -99,8 +100,7 @@ export function AuthProviderCookie({children}){
     setUser(null);
   }
 
-  const value = { user, loading, login, logout, storage: "cookie" };
+  const value = { user, loading, login, logout };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-
 
 }
