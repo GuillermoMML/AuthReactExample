@@ -25,16 +25,21 @@ Añade roles: { role: "admin" | "user" } y un RoleRoute que compruebe user.role.
 
 */
 function PublicLayout() {
-
-  const { user, login } = useAuth();
+  const { user } = useAuth();
 
   return (
-    
     <div>
-      <nav style={{ display: "flex", gap: 12, padding: 12, borderBottom: "1px solid #eee" }}>
+      <nav
+        style={{
+          display: "flex",
+          gap: 12,
+          padding: 12,
+          borderBottom: "1px solid #eee",
+        }}
+      >
         <Link to="/">Home</Link>
         <Link to="/app">App (protegida)</Link>
-        <Link to="/login">Login</Link>
+        {user ? <Link>Register</Link> : <Link to="/login">Login</Link>}
       </nav>
       <Outlet />
     </div>
@@ -43,28 +48,21 @@ function PublicLayout() {
 
 export default function App() {
 
-    console.log(decodeURIComponent(document.cookie))
-
-  //Si queremos decodificar las cookies
-/*   useEffect(() =>{
-    console.log(decodeURIComponent(document.cookie))
-  },[]) */
-
   
+  //console.log(decodeURIComponent(document.cookie)); Si tenemos curiosidad y queremos decodigicar nuestra cookie
+
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<PublicLayout />}>
-
           {/* Públicas */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Protegidas 
-          
+          {/* Protegidas           
               //Idea clave: ProtectedRoute se usa como “envoltorio” de todas las rutas que quieras proteger.
-
           */}
+
           <Route element={<ProtectedRoute />}>
             <Route path="/app" element={<Dashboard />} />
           </Route>

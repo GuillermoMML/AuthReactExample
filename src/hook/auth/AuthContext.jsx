@@ -62,6 +62,23 @@ export function AuthProvider({ children }) {
 }
 
 
+
+
+/*
+EXAMPLE
+
+Cookie.set("usuario","Jhon",{
+  expires: 7, // Número de días /Fecha
+  path: "/", //Qué rutas pueden acceder a la cookie (/, /admin, etc)
+  domain: "example.com"  //Restringe la cookie a un dominio o subdominio
+  secure: true, //Obliga envió solo por https
+  sameSite: "lax" //Previene el envió por cross-site (LAX, STRICT, NONE), Necesario tener el secure: true
+  })
+
+  Cross-Site o XSS es un ataque para introducir un código malicioso desde otros sitios y que es capaz de ejecutarse
+  desde el cliente
+
+*/
 export function AuthProvierCookie({children}){
   
   const [user, setUser] = useState(null);         // null = no autenticado
